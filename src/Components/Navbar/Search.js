@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import searchIcon from "../../Assets/Icons/searchIcon.png";
 
-import "./Search.css";
-
 export const Search = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,7 +18,7 @@ export const Search = () => {
   }, []);
 
   return (
-    <form class="d-flex searchbar" action={{ handleSubmit }}>
+    <form className="d-flex searchbar" action={{ handleSubmit }}>
       <label htmlFor="searchInput" className="d-flex align-items-center">
         <img
           src={searchIcon}
@@ -31,7 +29,7 @@ export const Search = () => {
       {width > 400 && (
         <input
           id="searchInput"
-          class="form-control"
+          className="form-control"
           type="search"
           placeholder="Search for posts..."
           aria-label="Search"

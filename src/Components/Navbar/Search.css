@@ -3,3 +3,12 @@
   flex: 2 2;
   margin-right: 40px;
 }
+
+.form-control {
+  background-color: green;
+}
+
+.form-control:hover {
+  background-color: white;
+  border: 2px solid blue;
+}

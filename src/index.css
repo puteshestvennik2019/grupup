@@ -1,0 +1,74 @@
+body {
+  font-size: 12px;
+  background-color: rgba(216, 216, 216, 0.6);
+}
+
+a {
+  color: inherit;
+}
+
+.searchbar {
+  max-width: 600px;
+  flex: 2 2;
+  margin-right: 40px;
+}
+
+.form-control {
+  background-color: #f8f9fa;
+}
+
+.form-control:hover {
+  background-color: white;
+  border-color: rgba(0, 129, 255, 0.9);
+  box-shadow: inset 0 3px 0px rgba(31, 149, 247, 0.075),
+    0 0 8px rgba(0, 129, 255, 0.9);
+}
+
+.btn-red {
+  background-color: #dd2d01;
+  color: white;
+}
+
+.btn {
+  font-size: 0.8rem;
+}
+
+.icon-btn-default {
+  opacity: 0.5;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.icon-btn-default:hover {
+  background-color: rgba(216, 216, 216, 0.6);
+  opacity: 0.8;
+}
+
+.secondary-item {
+  opacity: 0.5;
+}
+
+.listing-body {
+  max-height: 20vh;
+  overflow: hidden;
+  mask-image: linear-gradient(180deg, #000 65%, transparent);
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.clickable a,
+a:link,
+a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+.input-counter {
+  position: absolute;
+  right: 5px;
+  bottom: 11px;
+  vertical-align: middle;
+  pointer-events: none;
+  font-size: 10px;
+  letter-spacing: 0.6px;
+}

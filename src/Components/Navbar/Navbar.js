@@ -6,7 +6,7 @@ import { Search } from "./Search";
 export const Navbar = () => {
   return (
     <>
-      <nav className="navbar" style={{ fontSize: "0.8rem" }}>
+      <nav className="navbar bg-white mx-1" style={{ fontSize: "0.8rem" }}>
         <div className="container-fluid d-flex justify-content-between">
           <Logo />
           <Search />
