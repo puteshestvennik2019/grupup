@@ -1,19 +1,36 @@
 import React, { useState } from "react";
-import { Editor } from "@tinymce/tinymce-react";
+import Editor from "../Components/Post/Editor";
+import groupups from "../data/groupups";
+// import parse from "html-react-parser";
+// parse(string)
 
 const MAX_LEN = 100;
 
 function WritePost() {
-  const handleEditorChange = (e) => {
-    console.log("Content was updated:", e.target.getContent());
-  };
   const [title, setTitle] = useState("");
+  const [groupup, setGroupup] = useState("");
 
   return (
     <div className="p-3 bg-white container mt-5 col-xs-12 col-md-10 col-lg-8 col-xl-6">
-      <h5 className="pl-2 border-bottom border-light my-2 pb-2">
-        Write a post
-      </h5>
+      <div className="d-flex justify-content-start align-items-center">
+        <h6 className="border-bottom d-inline pt-2 h-100">Write a post to: </h6>
+        <select
+          className="ml-1 custom-select custom-select-sm col-md-6 col-lg-5"
+          onChange={(e) => setGroupup(e.target.value)}
+        >
+          <option value="" disabled selected>
+            Select a community...
+          </option>
+          {groupups.map((grpp) => {
+            const { id, groupup } = grpp;
+            return (
+              <option key={id} value={id}>
+                {groupup}
+              </option>
+            );
+          })}
+        </select>
+      </div>
       <div className="position-relative d-flex justify-content-between my-3">
         <input
           type="text"
@@ -33,24 +50,7 @@ function WritePost() {
         </span>
       </div>
 
-      <Editor
-        initialValue="<p>Initial content</p>"
-        init={{
-          height: 500,
-          menubar: false,
-          plugins: [
-            "advlist autolink lists link image",
-            "charmap print preview anchor help",
-            "searchreplace visualblocks code",
-            "insertdatetime media table paste wordcount",
-          ],
-          toolbar:
-            "undo redo | formatselect | bold italic | \
-            alignleft aligncenter alignright | \
-            bullist numlist outdent indent | help",
-        }}
-        onChange={handleEditorChange}
-      />
+      <Editor />
       <div className="d-flex justify-content-end my-3">
         <button className="ml-2 btn btn-outline-dark font-weight-bold">
           Preview

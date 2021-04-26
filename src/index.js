@@ -4,10 +4,23 @@ import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import index.css sedond to override bootstrap values
 import "./index.css";
+import { Auth0Provider } from "@auth0/auth0-react";
+import { UserProvider } from "./context/userContext";
+
+const { REACT_APP_AUTH0_CLIENT_ID, REACT_APP_AUTH0_DOMAIN } = process.env;
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Auth0Provider
+      domain={REACT_APP_AUTH0_DOMAIN}
+      clientId={REACT_APP_AUTH0_CLIENT_ID}
+      redirectUri={window.location.origin}
+      cacheLocation="localstorage"
+    >
+      <UserProvider>
+        <App />
+      </UserProvider>
+    </Auth0Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

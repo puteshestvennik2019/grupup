@@ -72,3 +72,15 @@ a:visited {
   font-size: 10px;
   letter-spacing: 0.6px;
 }
+
+.lg-post {
+  cursor: none !important;
+}
+
+.upvoted {
+  color: green;
+}
+
+.downvoted {
+  color: red;
+}

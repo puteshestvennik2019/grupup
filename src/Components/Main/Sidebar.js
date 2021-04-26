@@ -1,7 +1,7 @@
 import React from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import groupups from "../../groupups";
+import groupups from "../../data/groupups";
 
 function Sidebar() {
   return (
@@ -23,7 +23,7 @@ function Sidebar() {
               >
                 {groupup}
                 <h6>
-                  <span class="badge badge-light badge-pill">
+                  <span className="badge badge-light badge-pill">
                     {num_members}
                   </span>
                 </h6>
