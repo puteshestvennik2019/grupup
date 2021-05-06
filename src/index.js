@@ -6,6 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { UserProvider } from "./context/userContext";
+import { PostProvider } from "./context/postContext";
+import { GroupupProvider } from "./context/groupupContext";
 
 const { REACT_APP_AUTH0_CLIENT_ID, REACT_APP_AUTH0_DOMAIN } = process.env;
 
@@ -18,7 +20,11 @@ ReactDOM.render(
       cacheLocation="localstorage"
     >
       <UserProvider>
-        <App />
+        <GroupupProvider>
+          <PostProvider>
+            <App />
+          </PostProvider>
+        </GroupupProvider>
       </UserProvider>
     </Auth0Provider>
   </React.StrictMode>,

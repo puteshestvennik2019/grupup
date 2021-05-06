@@ -17,58 +17,32 @@ function Post({
   selftext,
   num_comments,
 }) {
-  const { isAuthenticated, userData, setUserData } = useUserContext();
+  const { isAuthenticated, userData } = useUserContext();
   const [vote, setVote] = useState(score);
-  const [userVote, setUserVote] = useState(0);
   const [read, setRead] = useState(false);
 
   useEffect(() => {
     if (userData) {
-      // check if user voted
-      if (userData.upvoted.includes(id)) setUserVote(1);
-      else if (userData.downvoted.includes(id)) setUserVote(-1);
       // check if user read
-      // if (userData.read.includes(id)) setRead(true);
+      if (userData.readPosts.includes(id)) setRead(true);
     }
   }, [isAuthenticated, userData]);
 
   const handleRead = () => {
-    if (!read) {
-      setRead(true);
-
-      // TODO: send to backend
-      // const readArray = [...user.read, id];
-      // setUser({ ...user, read: readArray });
-    }
+    // if (!read) {
+    //   setRead(true);
+    // TODO: send to backend
+    // const readArray = [...user.read, id];
+    // setUser({ ...user, read: readArray });
+    // }
   };
 
-  const handleVote = (val) => {
-    setVote(vote + handleUserVote(val));
-  };
+  const handleVote = (val) => setVote(vote + val);
 
-  const handleUserVote = (val) => {
-    if (val != userVote) {
-      let upV = [];
-      let downV = [];
-
-      if (userVote === 0) {
-        if (val === 1) upV = [...userData.upvoted, id];
-        else downV = [...userData.downvoted, id];
-      } else {
-        if (val === -1) {
-          upV = userData.upvoted.filter((post) => post !== id);
-        } else downV = userData.downvoted.filter((post) => post !== id);
-      }
-      setUserData({ ...userData, upvoted: upV, downvoted: downV });
-      setUserVote(userVote + val);
-
-      return val;
-    } else return 0;
-  };
   return (
     <section className="mt-2 bg-white row rounded">
-      <Col xs={1} className="bg-light" onClick={handleRead}>
-        <Vote score={vote} userVote={userVote} handleVote={handleVote}></Vote>
+      <Col xs={1} className="bg-light">
+        <Vote score={vote} handleVote={handleVote} id={id}></Vote>
       </Col>
       <Col className="d-flex flex-column">
         <PostHeading

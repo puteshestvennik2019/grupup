@@ -1,7 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import dummyUser from "../data/user";
-import { getSuggestedQuery } from "@testing-library/dom";
 
 const UserContext = React.createContext();
 
@@ -47,7 +45,6 @@ const UserProvider = ({ children }) => {
       const resp = await fetch("http://localhost:3001");
       const data = await resp.json();
       setUserData(data);
-      console.log(userData);
       sessionStorage.setItem("user", JSON.stringify(data));
     } catch (error) {
       console.log(error);
@@ -99,6 +96,7 @@ const UserProvider = ({ children }) => {
         logOut,
         isLoading,
         userData,
+        user,
         setUserData,
       }}
     >

@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import WritePost from "./pages/WritePost";
 import PrivateRoute from "./pages/PrivateRoute";
 import Wrapper from "./pages/Wrapper";
+import AllGroupups from "./pages/AllGroupups";
 
 export default function App() {
   return (
@@ -21,9 +22,8 @@ export default function App() {
           <Route path="/post/:id">
             <Post />
           </Route>
-          <Route path="/g/:id">
-            <Groupup />
-          </Route>
+          <Route path="/g/:id" component={Groupup} />
+          <Route path="/g/" component={AllGroupups} />
           <Route path="/u/:user">
             <Account />
           </Route>

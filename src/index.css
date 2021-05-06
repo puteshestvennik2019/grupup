@@ -84,3 +84,11 @@ a:visited {
 .downvoted {
   color: red;
 }
+
+.avatar {
+  height: 40px;
+}
+
+.btn-user-menu:hover {
+  border: rgba(216, 216, 216, 0.6);
+}

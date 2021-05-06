@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import Editor from "../Components/Post/Editor";
 import groupups from "../data/groupups";
+import { usePostContext } from "../context/postContext";
+
 // import parse from "html-react-parser";
 // parse(string)
 
 const MAX_LEN = 100;
 
 function WritePost() {
+  const { handleSubmit } = usePostContext();
   const [title, setTitle] = useState("");
   const [groupup, setGroupup] = useState("");
 
@@ -22,10 +25,10 @@ function WritePost() {
             Select a community...
           </option>
           {groupups.map((grpp) => {
-            const { id, groupup } = grpp;
+            const { id, name } = grpp;
             return (
               <option key={id} value={id}>
-                {groupup}
+                {name}
               </option>
             );
           })}
@@ -43,7 +46,7 @@ function WritePost() {
         />
         <span
           className={`input-counter ${
-            title.length == MAX_LEN && "text-danger font-weight-bold"
+            title.length === MAX_LEN && "text-danger font-weight-bold"
           }`}
         >
           {title ? title.length : 0}/{MAX_LEN}
@@ -55,7 +58,11 @@ function WritePost() {
         <button className="ml-2 btn btn-outline-dark font-weight-bold">
           Preview
         </button>
-        <button className="ml-2 btn btn-outline-dark font-weight-bold">
+        <button
+          className="ml-2 btn btn-outline-dark font-weight-bold"
+          disabled={!title || !groupup}
+          onClick={(e) => handleSubmit(e, { title: title, groupup: groupup })}
+        >
           Submit
         </button>
       </div>

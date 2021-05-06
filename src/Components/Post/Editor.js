@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import { usePostContext } from "../../context/postContext";
 
-function WysiwygEditor({ handleEditorChange }) {
+function WysiwygEditor({ initialValue }) {
+  const { handleEditorChange } = usePostContext();
   const { REACT_APP_TINY_CLOUD } = process.env;
   return (
     <Editor
+      initialValue={initialValue}
       api={REACT_APP_TINY_CLOUD}
       init={{
         placeholder: "Start typing",
