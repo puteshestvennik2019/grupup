@@ -4,9 +4,11 @@ import timeElapsed from "../../utils/timeElapsed";
 import Editor from "./Editor";
 import { FaCommentAlt } from "react-icons/fa";
 import { usePostContext } from "../../context/postContext";
+import parse from "html-react-parser";
 
-function Comment({ comments }) {
-  const { handleSubmit, text, setText, handlePut } = usePostContext();
+function Comment({ commentsTree, postId }) {
+  const { handleSubmit, text, setText, handlePut, comments } = usePostContext();
+
   // the below states to be moved a level up to prevent openning multiple editors
   const [showEditor, setShowEditor] = useState(false);
   const [clickedReply, setClickedReply] = useState("");
@@ -23,8 +25,12 @@ function Comment({ comments }) {
 
   return (
     <div className="mb-3 pl-4 border-left">
-      {comments.map((item) => {
-        const { author, comment, score, id, created, comments } = item;
+      {commentsTree.map((item) => {
+        const { id, childComments } = item;
+
+        // inner loop
+        const comment = comments.find((comment) => comment.id === id);
+
         const handleVote = () => {
           console.log("Handle comment voting");
         };
@@ -34,16 +40,16 @@ function Comment({ comments }) {
               <>
                 <div>
                   <a className="pr-1" href="#">
-                    {author}
+                    {comment.author_name}
                   </a>
                   <span className="pl-1 secondary-item">
-                    {timeElapsed(created)} ago
+                    {timeElapsed(comment.created)} ago
                   </span>
                 </div>
-                <p className="mb-1">{comment}</p>
+                <div className="mb-1">{parse(comment.html_text)}</div>
                 <div className="d-flex align-items-center">
                   <Vote
-                    score={score}
+                    score={0}
                     small={true}
                     id={id}
                     handleVote={handleVote}
@@ -51,7 +57,7 @@ function Comment({ comments }) {
                   <span
                     className="ml-2 icon-btn-default"
                     onClick={() => {
-                      handleEdit(id, comment);
+                      handleEdit(id, comment.html_text);
                     }}
                   >
                     <FaCommentAlt className="mr-1"></FaCommentAlt>
@@ -75,7 +81,9 @@ function Comment({ comments }) {
                       className="my-2 float-right btn btn-outline-dark font-weight-bold"
                       // if state is '', no comment has been written
                       disabled={!text}
-                      onClick={(e) => handleSubmit(e, { commentId: id })}
+                      onClick={(e) =>
+                        handleSubmit(e, { parentId: id, postId: postId })
+                      }
                     >
                       Comment
                     </button>
@@ -84,7 +92,7 @@ function Comment({ comments }) {
               </>
             ) : (
               <div className="col-9">
-                <Editor initialValue={comment} />
+                <Editor initialValue={comment.html_text} />
                 <div className="d-flex justify-content-end my-3">
                   <button
                     className="btn btn-outline-dark font-weight-bold"
@@ -101,7 +109,9 @@ function Comment({ comments }) {
                 </div>
               </div>
             )}
-            {comments && <Comment comments={comments} />}
+            {childComments && (
+              <Comment commentsTree={childComments} postId={postId} />
+            )}
           </React.Fragment>
         );
       })}

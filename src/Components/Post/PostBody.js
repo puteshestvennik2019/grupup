@@ -1,11 +1,11 @@
 import React from "react";
-import Row from "react-bootstrap/Row";
+import parse from "html-react-parser";
 
-function PostBody({ selftext, title, read }) {
+function PostBody({ text, title, read, singlePostPage }) {
   return (
-    <article className="listing-body">
+    <article className={singlePostPage ? "" : "listing-body"}>
       <h6 className={read ? "secondary-item" : ""}>{title}</h6>
-      <p>{selftext}</p>
+      <div>{parse(text)}</div>
     </article>
   );
 }

@@ -5,18 +5,27 @@ import Post from "../Post/Post";
 import data from "../../data/data";
 import { Link } from "react-router-dom";
 
-function Main() {
+function Main({ showJoin, joinGroupup, posts }) {
   return (
     <Col lg={8}>
       <Row className="d-flex justify-content-end">
-        <Link to="/submit">
-          <button className="btn btn-outline-dark font-weight-bold">
-            Post something
+        {!showJoin ? (
+          <Link to="/submit">
+            <button className="btn btn-outline-dark font-weight-bold">
+              Post something
+            </button>
+          </Link>
+        ) : (
+          <button
+            className="btn btn-outline-dark font-weight-bold"
+            onClick={joinGroupup}
+          >
+            Join groupUp
           </button>
-        </Link>
+        )}
       </Row>
       <main className="mt-3">
-        {data.map((post) => {
+        {posts.map((post) => {
           return <Post key={post.id} {...post} />;
         })}
       </main>

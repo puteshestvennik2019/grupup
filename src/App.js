@@ -3,7 +3,7 @@ import { Navbar } from "./Components/Navbar/Navbar";
 import Landing from "./pages/Landing";
 import Account from "./pages/Account";
 import Groupup from "./pages/Groupup";
-import Post from "./pages/PostPage";
+import PostPage from "./pages/PostPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import WritePost from "./pages/WritePost";
 import PrivateRoute from "./pages/PrivateRoute";
@@ -20,7 +20,7 @@ export default function App() {
             <Landing />
           </Route>
           <Route path="/post/:id">
-            <Post />
+            <PostPage />
           </Route>
           <Route path="/g/:id" component={Groupup} />
           <Route path="/g/" component={AllGroupups} />

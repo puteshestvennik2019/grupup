@@ -1,5 +1,4 @@
 body {
-  font-size: 12px;
   background-color: rgba(216, 216, 216, 0.6);
 }
 
@@ -48,6 +47,7 @@ a {
   opacity: 0.5;
 }
 
+/* controls max height of a post in a list */
 .listing-body {
   max-height: 20vh;
   overflow: hidden;

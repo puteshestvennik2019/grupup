@@ -9,35 +9,65 @@ const GroupupProvider = ({ children }) => {
   const groupupObj = {
     name: "",
     description: "",
+    thumbnail: "",
   };
   const [newGroupup, setNewGroupup] = useState(groupupObj);
   const [groupups, setGroupups] = useState([]);
 
-  const { userData } = useUserContext();
+  const { token, userData, setUserData } = useUserContext();
 
   const fetchGroupups = (endpoint) => {
     fetch(`${BASE_URL}${endpoint}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
+        authorization: `Bearer ${token}`,
       },
     }).then(async (resp) => {
       setGroupups(await resp.json());
     });
   };
 
-  const createGroupup = () => {
+  const createGroupup = (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("thumbnail", newGroupup.thumbnail);
+    data.append("name", newGroupup.name);
+    data.append("description", newGroupup.description);
+    console.log(token);
+
     fetch(`${BASE_URL}/g`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+      body: data,
+    })
+      .then((resp) => {
+        console.log(resp);
+        setNewGroupup(groupupObj);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const joinGroupup = (id) => {
+    console.log("joining groupup" + id);
+    fetch(`${BASE_URL}/g/user`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
+        authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ newGroupup }),
-    }).then((resp) => {
-      console.log(resp);
-      // if successful, display modal
-    });
+      body: JSON.stringify({ id: id }),
+    })
+      .then((resp) => {
+        console.log(resp);
+        const newGroupups = [...userData.groupups, id];
+        setUserData({ ...userData, groupups: newGroupups });
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -53,7 +83,9 @@ const GroupupProvider = ({ children }) => {
         createGroupup,
         fetchGroupups,
         setNewGroupup,
+        newGroupup,
         groupups,
+        joinGroupup,
       }}
     >
       {children}

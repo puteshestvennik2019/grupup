@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
+const { REACT_APP_BACKEND_URL } = process.env;
+const BASE_URL = REACT_APP_BACKEND_URL;
 const UserContext = React.createContext();
 
 const UserProvider = ({ children }) => {
@@ -15,12 +17,18 @@ const UserProvider = ({ children }) => {
 
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState("");
   //   const [vote, setVote] = useState(score);
   //   const [userVote, setUserVote] = useState(0);
   //   const [read, setRead] = useState(false);
 
-  const logIn = () => {
+  const getToken = () => {
+    getAccessTokenSilently().then((resp) => setToken(resp));
+  };
+
+  const logIn = async () => {
     loginWithRedirect();
+
     // loginWithPopup()
     // .then(() => {
     //   getAccessTokenSilently().then((accessToken) =>
@@ -34,7 +42,7 @@ const UserProvider = ({ children }) => {
     // })
   };
 
-  const logOut = () => {
+  const logOut = async () => {
     sessionStorage.removeItem("user");
     setUserData(null);
     logout();
@@ -42,7 +50,13 @@ const UserProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const resp = await fetch("http://localhost:3001");
+      const token = await getAccessTokenSilently();
+      const resp = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/u/${user.sub}`,
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
       const data = await resp.json();
       setUserData(data);
       sessionStorage.setItem("user", JSON.stringify(data));
@@ -50,8 +64,67 @@ const UserProvider = ({ children }) => {
       console.log(error);
     }
   };
+
+  const deleteUser = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/u/${user.sub}`, {
+        method: "DELETE",
+        headers: { authorization: `Bearer ${token}` },
+      })
+        .then(() => {
+          console.log("Deleted user");
+          logOut();
+        })
+        .catch((error) => console.log(error));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // userData: read posts
+  const handleReadPost = async (id) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const resp = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/u/read/${id}`,
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
+      // Response handling not requiered
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // userData: votes
+  const handleUserVote = async (id, val) => {
+    console.log("inside handleUserVote");
+    console.log(id, val);
+
+    try {
+      const token = await getAccessTokenSilently();
+      const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/vote`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ voteVal: val, postId: id }),
+      });
+      // Response handling not requiered
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
+      if (!token) {
+        getToken();
+      }
       if (!userData) {
         if (!sessionStorage.getItem("user")) fetchUser();
         else {
@@ -67,7 +140,7 @@ const UserProvider = ({ children }) => {
 
     // check if user read
     //   if (!read && user.read.includes(id)) setRead(true);
-  }, [isAuthenticated, userData]);
+  }, [isAuthenticated, userData, logIn]);
   // const userRead = (id) => {
   //   if (!read) {
   //     setRead(true);
@@ -94,10 +167,14 @@ const UserProvider = ({ children }) => {
         isAuthenticated,
         logIn,
         logOut,
+        deleteUser,
         isLoading,
         userData,
         user,
         setUserData,
+        token,
+        handleReadPost,
+        handleUserVote,
       }}
     >
       {children}

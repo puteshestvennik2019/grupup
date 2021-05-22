@@ -18,6 +18,7 @@ ReactDOM.render(
       clientId={REACT_APP_AUTH0_CLIENT_ID}
       redirectUri={window.location.origin}
       cacheLocation="localstorage"
+      audience="https://groupup/api"
     >
       <UserProvider>
         <GroupupProvider>

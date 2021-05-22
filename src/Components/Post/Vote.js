@@ -8,17 +8,6 @@ function Vote({ score, handleVote, small, id }) {
 
   const handleUserVote = (val) => {
     if (val !== userVote) {
-      fetch(`http://localhost:3001/api/vote/${id}`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-        body: JSON.stringify({ vote: val }),
-      }).then((resp) => {
-        console.log(resp);
-      });
-
       let upV = userData.upvoted;
       let downV = userData.downvoted;
 
@@ -44,7 +33,7 @@ function Vote({ score, handleVote, small, id }) {
       if (userData.upvoted.includes(id)) setUserVote(1);
       else if (userData.downvoted.includes(id)) setUserVote(-1);
     }
-  }, []);
+  }, [userData]);
 
   return (
     <div

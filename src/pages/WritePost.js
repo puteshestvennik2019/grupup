@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Editor from "../Components/Post/Editor";
-import groupups from "../data/groupups";
 import { usePostContext } from "../context/postContext";
+import { useUserContext } from "../context/userContext";
+import { useGroupupContext } from "../context/groupupContext";
 
 // import parse from "html-react-parser";
 // parse(string)
@@ -10,8 +11,16 @@ const MAX_LEN = 100;
 
 function WritePost() {
   const { handleSubmit } = usePostContext();
+  const { token } = useUserContext();
+  const { groupups, fetchGroupups } = useGroupupContext();
+
   const [title, setTitle] = useState("");
   const [groupup, setGroupup] = useState("");
+
+  useEffect(() => {
+    // fetch groupups this user is subscribed to
+    if (token) fetchGroupups("/g/user");
+  }, [token]);
 
   return (
     <div className="p-3 bg-white container mt-5 col-xs-12 col-md-10 col-lg-8 col-xl-6">

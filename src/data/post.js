@@ -1,7 +1,7 @@
 export default {
   subreddit: "redditdev",
-  selfText:
-    'Anyone has any idea how to get "trending today" posts from [r/popular](https://www.reddit.com/r/popular/) ?',
+  html_text:
+    'Anyone has any idea how to get "trending today" posts from [r/popular](https://www.reddit.com/r/popular/) ?Anyone has any idea how to get "trending today" posts from [r/popular](https://www.reddit.com/r/popular/) ?Anyone has any idea how to get "trending today" posts from [r/popular](https://www.reddit.com/r/popular/) ?',
   title: 'How to get "trending today" posts?',
   score: 5,
   created: 1618180320.0,

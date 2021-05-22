@@ -11,33 +11,30 @@ function Post({
   id,
   score,
   title,
-  subreddit,
+  groupup_id,
+  groupup_name,
   created,
   author,
-  selftext,
+  author_name,
+  html_text,
   num_comments,
+  singlePostPage,
 }) {
-  const { isAuthenticated, userData } = useUserContext();
+  const { isAuthenticated, userData, handleUserVote } = useUserContext();
   const [vote, setVote] = useState(score);
   const [read, setRead] = useState(false);
 
   useEffect(() => {
     if (userData) {
       // check if user read
-      if (userData.readPosts.includes(id)) setRead(true);
+      if (userData.read_posts.includes(id)) setRead(true);
     }
   }, [isAuthenticated, userData]);
 
-  const handleRead = () => {
-    // if (!read) {
-    //   setRead(true);
-    // TODO: send to backend
-    // const readArray = [...user.read, id];
-    // setUser({ ...user, read: readArray });
-    // }
+  const handleVote = (val) => {
+    setVote(vote + val);
+    handleUserVote(id, val);
   };
-
-  const handleVote = (val) => setVote(vote + val);
 
   return (
     <section className="mt-2 bg-white row rounded">
@@ -46,12 +43,17 @@ function Post({
       </Col>
       <Col className="d-flex flex-column">
         <PostHeading
-          subreddit={subreddit}
+          groupup={{ name: groupup_name, id: groupup_id }}
           created={created}
-          author={author}
+          author={{ id: author, name: author_name }}
         ></PostHeading>
         <Link to={`/post/${id}`} className="clickable">
-          <PostBody selftext={selftext} title={title} read={read} />
+          <PostBody
+            text={html_text}
+            title={title}
+            read={read}
+            singlePostPage={singlePostPage}
+          />
         </Link>
         <PostFooter comments={num_comments}></PostFooter>
       </Col>

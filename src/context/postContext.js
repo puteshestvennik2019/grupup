@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useUserContext } from "./userContext";
 
 const PostContext = React.createContext();
@@ -7,52 +6,77 @@ const { REACT_APP_BACKEND_URL } = process.env;
 const BASE_URL = `${REACT_APP_BACKEND_URL}/api`;
 
 const PostProvider = ({ children }) => {
-  // input text
-  const [text, setText] = useState("");
   const [posts, setPosts] = useState([]);
+  const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
   const [groupup, setGroupup] = useState("");
-  const [groupups, setGroupups] = useState([]);
+  const [thumbnail, setThumbnail] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const { userData } = useUserContext();
+  // input text for Editor
+  const [text, setText] = useState("");
+
+  const { userData, token } = useUserContext();
 
   const handleEditorChange = (e) => {
     setText(e.target.getContent());
-    console.log(text);
   };
+
+  /* Handles 3 types, based on arguments passed:
+  // - id:              Comment to post with id
+  // - commentId:       Reply to comment with id = commentId
+  // - groupup, title:  A new post in groupup id = groupup 
+  */
   const handleSubmit = (e, obj) => {
     e.preventDefault();
+
+    // New comment
     if (obj.hasOwnProperty("id")) {
       fetch(`${BASE_URL}/p/${obj.id}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
+          authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ id: obj.id, comment: text }),
+        body: JSON.stringify({ postId: obj.id, html_text: text }),
       }).then((resp) => {
         console.log(resp);
         // if successful, display modal
       });
-    } else if (obj.hasOwnProperty("commentId")) {
-      fetch(`${BASE_URL}/c/${obj.commentId}`, {
+    }
+
+    // New reply to comment
+    else if (obj.hasOwnProperty("parentId")) {
+      console.log("logging an attempt to reply", obj.parentId, obj.postId);
+      fetch(`${BASE_URL}/c/${obj.parentId}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
+          authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ id: obj.commentId, comment: text }),
+        body: JSON.stringify({
+          parentId: obj.parentId,
+          html_text: text,
+          postId: obj.postId,
+        }),
       }).then((resp) => {
         console.log(resp);
         // if successful, display modal
       });
-    } else {
+    }
+
+    // New post
+    else {
       fetch(`${BASE_URL}/g/${obj.groupup}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
+          authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title: obj.title, post: text }),
+        body: JSON.stringify({ title: obj.title, html_text: text }),
       }).then(async (resp) => {
         console.log(await resp.json());
         // if successful, display modal
@@ -60,6 +84,9 @@ const PostProvider = ({ children }) => {
     }
   };
 
+  // *******************************************************
+  // post and comment editing - not yet enabled
+  // *******************************************************
   const handlePut = (e, obj) => {
     e.preventDefault();
     console.log(obj, text);
@@ -71,56 +98,75 @@ const PostProvider = ({ children }) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
+        authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ readPost: id }),
+      body: JSON.stringify({ read_post: id }),
     });
   };
 
+  /* Fetch posts:
+  // - from all user's communities (endpoint = '', i.e.: Landing page)
+  // - from a particular community only (additionally, fetch info about the community) 
+  */
   const fetchPosts = (endpoint) => {
-    // fetch(`${BASE_URL}/${endpoint}`, {
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json;charset=UTF-8",
-    //   },
-    // }).then(async (resp) => {
-    //   const data = await resp.json();
-    //   setPosts(data.posts);
-    //   setGroupup(data.groupup);
-    // });
-  };
-
-  const fetchGroupups = (endpoint) => {
-    fetch(`${BASE_URL}/${endpoint}`, {
+    fetch(`${BASE_URL}${endpoint}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
+        authorization: `Bearer ${token}`,
       },
     }).then(async (resp) => {
-      setGroupups(await resp.json());
+      const data = await resp.json();
+      setPosts(data.posts);
+
+      // if fetching posts from a signle groupup
+      if (endpoint !== "") {
+        setGroupup(data.groupup);
+        if (groupup) {
+          const base64 = new Buffer.from(groupup.thumbnail.data).toString(
+            "base64"
+          );
+          setThumbnail("data:image;base64," + base64);
+        }
+      }
+    });
+  };
+
+  const fetchPost = (id) => {
+    setLoading(true);
+    fetch(`${BASE_URL}/p/${id}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      res.json().then((data) => {
+        console.log(data);
+        setPost(data.post);
+        setComments(data.comments);
+        setLoading(false);
+      });
     });
   };
 
   return (
     <PostContext.Provider
       value={{
-        // isAuthenticated,
-        // logIn,
-        // logOut,
-        // isLoading,
-        // userData,
-        // user,
-        // setUserData,
+        thumbnail,
         fetchPosts,
-        fetchGroupups,
+        fetchPost,
         handleSubmit,
         handleEditorChange,
         handlePut,
         handleReadPost,
         groupup,
-        groupups,
         posts,
+        post,
+        comments,
         text,
         setText,
+        loading,
       }}
     >
       {children}

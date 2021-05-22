@@ -6,17 +6,24 @@ import Container from "react-bootstrap/Container";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { useUserContext } from "../context/userContext";
 import { useGroupupContext } from "../context/groupupContext";
+import { usePostContext } from "../context/postContext";
 
 const Landing = () => {
+  const { userData, token } = useUserContext();
   const { groupups, fetchGroupups } = useGroupupContext();
+  const { fetchPosts, posts } = usePostContext();
 
   useEffect(() => {
-    fetchGroupups("/g");
-  }, []);
+    // fetch groupups this user is subscribed to
+    if (token) {
+      fetchGroupups("/g/user");
+      fetchPosts("");
+    }
+  }, [token]);
   return (
     <Container fluid="lg">
       <Row className="mt-5">
-        <Main />
+        <Main posts={posts} />
         <Sidebar groupups={groupups} />
       </Row>
     </Container>
@@ -24,5 +31,5 @@ const Landing = () => {
 };
 
 export default withAuthenticationRequired(Landing, {
-  onRedirecting: () => <div>Loading...</div>,
+  onRedirecting: () => <div>Redirecting you to the login page...</div>,
 });
