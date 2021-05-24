@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Vote from "./Vote";
 import timeElapsed from "../../utils/timeElapsed";
 import Editor from "./Editor";
@@ -39,9 +39,7 @@ function Comment({ commentsTree, postId }) {
             {clickedEdit !== id ? (
               <>
                 <div>
-                  <a className="pr-1" href="#">
-                    {comment.author_name}
-                  </a>
+                  <span className="pr-1">{comment.author_name}</span>
                   <span className="pl-1 secondary-item">
                     {timeElapsed(comment.created)} ago
                   </span>

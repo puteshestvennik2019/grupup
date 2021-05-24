@@ -1,10 +1,9 @@
 import React from "react";
 import { useUserContext } from "../../context/userContext";
-import { IoMdArrowDropdown } from "react-icons/io";
 import Dropdown from "react-bootstrap/Dropdown";
 
 const AccountButton = () => {
-  const { isAuthenticated, logOut, user } = useUserContext();
+  const { logOut, user } = useUserContext();
   return (
     <Dropdown>
       <Dropdown.Toggle variant="default" id="dropdown-basic">

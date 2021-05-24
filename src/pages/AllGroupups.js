@@ -2,16 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useGroupupContext } from "../context/groupupContext";
 import { IoIosArrowDropdown } from "react-icons/io";
 import NewCommunityForm from "../Components/Main/NewCommunityForm";
-import { Link } from "react-router-dom";
 
 const AllGroupups = () => {
-  const {
-    createGroupup,
-    fetchGroupups,
-    groupups,
-    newGroupup,
-    setNewGroupup,
-  } = useGroupupContext();
+  const { createGroupup, fetchGroupups, groupups, newGroupup, setNewGroupup } =
+    useGroupupContext();
 
   const [showInput, setShowInput] = useState(false);
 

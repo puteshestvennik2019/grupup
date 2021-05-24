@@ -1,8 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-const { REACT_APP_BACKEND_URL } = process.env;
-const BASE_URL = REACT_APP_BACKEND_URL;
 const UserContext = React.createContext();
 
 const UserProvider = ({ children }) => {
@@ -16,11 +14,7 @@ const UserProvider = ({ children }) => {
   } = useAuth0();
 
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [token, setToken] = useState("");
-  //   const [vote, setVote] = useState(score);
-  //   const [userVote, setUserVote] = useState(0);
-  //   const [read, setRead] = useState(false);
 
   const getToken = () => {
     getAccessTokenSilently().then((resp) => setToken(resp));
@@ -86,12 +80,9 @@ const UserProvider = ({ children }) => {
   const handleReadPost = async (id) => {
     try {
       const token = await getAccessTokenSilently();
-      const resp = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/u/read/${id}`,
-        {
-          headers: { authorization: `Bearer ${token}` },
-        }
-      );
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/u/read/${id}`, {
+        headers: { authorization: `Bearer ${token}` },
+      });
       // Response handling not requiered
     } catch (error) {
       console.log(error);
@@ -105,7 +96,7 @@ const UserProvider = ({ children }) => {
 
     try {
       const token = await getAccessTokenSilently();
-      const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/vote`, {
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/u/vote`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -133,34 +124,8 @@ const UserProvider = ({ children }) => {
         }
       } else sessionStorage.setItem("user", JSON.stringify(userData));
     }
-
-    // check if user voted
-    //   if (user.upvoted.includes(id)) setUserVote(1);
-    //   else if (user.downvoted.includes(id)) setUserVote(-1);
-
-    // check if user read
-    //   if (!read && user.read.includes(id)) setRead(true);
   }, [isAuthenticated, userData, logIn]);
-  // const userRead = (id) => {
-  //   if (!read) {
-  //     setRead(true);
 
-  //     // TODO: send to backend
-  //     const readArray = [...user.read, id];
-  //     setUser({ ...user, read: readArray });
-  //   }
-  // };
-
-  //   const handleUserVote = (val) => {
-  //     if (val != userVote) {
-  //         let upV = [];
-  //         let downV = [];
-  //         if (userVote === 0) {
-  //             if (val === 1) upV = [...user.upvoted, ]
-  //         }
-  //         setUserVote(userVote + val);
-  //     }
-  //   };
   return (
     <UserContext.Provider
       value={{

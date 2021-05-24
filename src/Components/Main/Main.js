@@ -2,7 +2,6 @@ import React from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Post from "../Post/Post";
-import data from "../../data/data";
 import { Link } from "react-router-dom";
 
 function Main({ showJoin, joinGroupup, posts }) {

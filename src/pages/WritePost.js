@@ -4,9 +4,6 @@ import { usePostContext } from "../context/postContext";
 import { useUserContext } from "../context/userContext";
 import { useGroupupContext } from "../context/groupupContext";
 
-// import parse from "html-react-parser";
-// parse(string)
-
 const MAX_LEN = 100;
 
 function WritePost() {
@@ -18,7 +15,6 @@ function WritePost() {
   const [groupup, setGroupup] = useState("");
 
   useEffect(() => {
-    // fetch groupups this user is subscribed to
     if (token) fetchGroupups("/g/user");
   }, [token]);
 

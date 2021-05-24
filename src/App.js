@@ -6,7 +6,6 @@ import Groupup from "./pages/Groupup";
 import PostPage from "./pages/PostPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import WritePost from "./pages/WritePost";
-import PrivateRoute from "./pages/PrivateRoute";
 import Wrapper from "./pages/Wrapper";
 import AllGroupups from "./pages/AllGroupups";
 

@@ -24,6 +24,7 @@ export const Search = () => {
           src={searchIcon}
           height="20px"
           className="position-absolute pl-1 mt-2"
+          alt="search icon"
         />
       </label>
       {width > 400 && (

@@ -9,7 +9,7 @@ import { useGroupupContext } from "../context/groupupContext";
 import { usePostContext } from "../context/postContext";
 
 const Landing = () => {
-  const { userData, token } = useUserContext();
+  const { token } = useUserContext();
   const { groupups, fetchGroupups } = useGroupupContext();
   const { fetchPosts, posts } = usePostContext();
 

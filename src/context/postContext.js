@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { useUserContext } from "./userContext";
 
 const PostContext = React.createContext();
@@ -16,7 +16,7 @@ const PostProvider = ({ children }) => {
   // input text for Editor
   const [text, setText] = useState("");
 
-  const { userData, token } = useUserContext();
+  const { token } = useUserContext();
 
   const handleEditorChange = (e) => {
     setText(e.target.getContent());
@@ -46,7 +46,7 @@ const PostProvider = ({ children }) => {
       });
     }
 
-    // New reply to comment
+    // New reply to a comment
     else if (obj.hasOwnProperty("parentId")) {
       console.log("logging an attempt to reply", obj.parentId, obj.postId);
       fetch(`${BASE_URL}/c/${obj.parentId}`, {

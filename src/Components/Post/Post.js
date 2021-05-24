@@ -29,7 +29,7 @@ function Post({
       // check if user read
       if (userData.read_posts.includes(id)) setRead(true);
     }
-  }, [isAuthenticated, userData]);
+  }, [isAuthenticated, userData, id]);
 
   const handleVote = (val) => {
     setVote(vote + val);

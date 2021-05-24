@@ -33,7 +33,7 @@ function Vote({ score, handleVote, small, id }) {
       if (userData.upvoted.includes(id)) setUserVote(1);
       else if (userData.downvoted.includes(id)) setUserVote(-1);
     }
-  }, [userData]);
+  }, [userData, id]);
 
   return (
     <div

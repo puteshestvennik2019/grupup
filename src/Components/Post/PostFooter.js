@@ -7,7 +7,7 @@ function PostFooter({ comments }) {
       <span className="p-1 icon-btn-default">
         <FaCommentAlt />
         <span className="px-1">{comments}</span>
-        <span>{parseInt(comments) == 1 ? "Comment" : "Comments"}</span>
+        <span>{parseInt(comments) === 1 ? "Comment" : "Comments"}</span>
       </span>
     </div>
   );

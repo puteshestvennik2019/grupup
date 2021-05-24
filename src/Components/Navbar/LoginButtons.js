@@ -1,18 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
-import LoginModal from "./LoginModal";
 import AccountButton from "./AccountButton";
 import { useUserContext } from "../../context/userContext";
 
 export const LoginButtons = () => {
   const { isAuthenticated, logIn } = useUserContext();
 
-  const [popupState, setPopupState] = useState(false);
-  const [loginState, setLoginState] = useState(false);
-  const handleClick = (e) => {
-    setPopupState(true);
-    setLoginState(e.target.id === "login");
-  };
+  // const [popupState, setPopupState] = useState(false);
+  // const [loginState, setLoginState] = useState(false);
+
   return (
     <div id="navbarContent" className="justify-content-end">
       {!isAuthenticated ? (
@@ -38,11 +34,11 @@ export const LoginButtons = () => {
         </>
       )}
 
-      <LoginModal
+      {/* <LoginModal
         login={loginState}
         show={popupState}
         setShow={setPopupState}
-      />
+      /> */}
     </div>
   );
 };

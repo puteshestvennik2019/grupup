@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { usePostContext } from "../../context/postContext";
 
@@ -19,10 +19,9 @@ function WysiwygEditor({ initialValue }) {
           "searchreplace visualblocks code",
           "insertdatetime media table paste wordcount",
         ],
-        toolbar:
-          "undo redo | formatselect | bold italic | \
-            alignleft aligncenter alignright | \
-            bullist numlist outdent indent | help",
+        toolbar: `undo redo | formatselect | bold italic | 
+            alignleft aligncenter alignright | 
+            bullist numlist outdent indent | help`,
       }}
       onChange={handleEditorChange}
     />

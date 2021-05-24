@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { useUserContext } from "./userContext";
 
 const GroupupContext = React.createContext();
@@ -73,13 +73,6 @@ const GroupupProvider = ({ children }) => {
   return (
     <GroupupContext.Provider
       value={{
-        // isAuthenticated,
-        // logIn,
-        // logOut,
-        // isLoading,
-        // userData,
-        // user,
-        // setUserData,
         createGroupup,
         fetchGroupups,
         setNewGroupup,
